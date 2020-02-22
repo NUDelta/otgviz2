@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>OTGViz2</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+</head>
+<body>
+
+<div role="region" id="mapid" style="width: 1200px; height: 800px;"/>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script>
+    // Example path
+    const paths = [
+        [[41.925685, -87.635986],
+        [41.925621, -87.639076],
+        [41.925589, -87.641437],
+        [41.92551, -87.64399],
+        [41.925494, -87.646329],
+        [41.924903, -87.646286],
+        [41.924184, -87.646265],
+        [41.923674, -87.646265],
+        [41.923179, -87.646243],
+        [41.921662, -87.646179]]
+    ];
+
+    const markerColors = [
+        'blue',
+        'gold',
+        'red',
+        'green',
+        'orange',
+        'yellow',
+        'violet',
+        'grey',
+        'black'
+    ];
+
+    const mymap = L.map('mapid')
+                    .setView(paths[0][Math.floor(paths[0].length / 2)], 13);
+
+    const mapStyle = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+    L.tileLayer(mapStyle, {
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1
+    }).addTo(mymap);
+
+    paths.forEach((path, i) => {
+        const color = markerColors[i % markerColors.length];
+        const icon = new L.Icon({
+            iconUrl: `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`
+        });
+        path.forEach(point => {
+            L.marker(point, {icon: icon}).addTo(mymap);
+        });
+    });
+
+</script>
+</body>
+</html>
