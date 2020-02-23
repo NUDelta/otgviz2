@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+    
 <head>
 	<title>OTGViz2</title>
 
@@ -11,24 +12,14 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
 </head>
-<body>
 
-<div role="region" id="mapid" style="width: 1200px; height: 800px;"/>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<body>
+    <div role="region" id="mapid" style="width: 1200px; height: 800px;"/>
+</body>
+
+<script src="style.js"></script>
 <script src="paths.js"></script>
 <script>
-    const markerColors = [
-        'blue',
-        'gold',
-        'red',
-        'green',
-        'orange',
-        'yellow',
-        'violet',
-        'grey',
-        'black'
-    ];
-
     paths = paths.map(path => {
         return path.map(point => {
             if ("latitude" in point && "longitude" in point) {
@@ -38,10 +29,9 @@
             }
         });
     });
+
     const mymap = L.map('mapid')
                     .setView(paths[0][Math.floor(paths[0].length / 2)], 13);
-
-    const mapStyle = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
     L.tileLayer(mapStyle, {
         maxZoom: 18,
         id: 'mapbox/streets-v11',
@@ -52,14 +42,13 @@
     paths.forEach((path, i) => {
         const color = markerColors[i % markerColors.length];
         const icon = new L.Icon({
-            iconUrl: `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`
+            iconUrl: markerColors[i]
         });
         path.forEach((point, j) => {
             L.marker(point, {icon: icon}).addTo(mymap)
                 .bindPopup(`${j}: ${point.toString()}`);
         });
     });
-
 </script>
-</body>
+
 </html>
