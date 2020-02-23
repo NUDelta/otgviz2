@@ -27,7 +27,20 @@
         [41.924184, -87.646265],
         [41.923674, -87.646265],
         [41.923179, -87.646243],
-        [41.921662, -87.646179]]
+        [41.921662, -87.646179]],
+        
+        [{
+            latitude: 41.923674,
+            longitude: -87.646265
+        },
+        {
+            latitude: 41.923179,
+            longitude: -87.646243
+        },
+        {
+            latitude: 41.921662,
+            longitude: -87.646179
+        }]
     ];
 
     const markerColors = [
@@ -58,8 +71,12 @@
         const icon = new L.Icon({
             iconUrl: `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`
         });
-        path.forEach(point => {
-            L.marker(point, {icon: icon}).addTo(mymap);
+        path.forEach((point, j) => {
+            if ("latitude" in point && "longitude" in point) {
+                point = [point.latitude, point.longitude];
+            }
+            L.marker(point, {icon: icon}).addTo(mymap)
+                .bindPopup(`${j}: ${point.toString()}`);
         });
     });
 
