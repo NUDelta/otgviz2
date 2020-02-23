@@ -15,34 +15,8 @@
 
 <div role="region" id="mapid" style="width: 1200px; height: 800px;"/>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="paths.js"></script>
 <script>
-    // Example path
-    const paths = [
-        [[41.925685, -87.635986],
-        [41.925621, -87.639076],
-        [41.925589, -87.641437],
-        [41.92551, -87.64399],
-        [41.925494, -87.646329],
-        [41.924903, -87.646286],
-        [41.924184, -87.646265],
-        [41.923674, -87.646265],
-        [41.923179, -87.646243],
-        [41.921662, -87.646179]],
-        
-        [{
-            latitude: 41.923674,
-            longitude: -87.646265
-        },
-        {
-            latitude: 41.923179,
-            longitude: -87.646243
-        },
-        {
-            latitude: 41.921662,
-            longitude: -87.646179
-        }]
-    ];
-
     const markerColors = [
         'blue',
         'gold',
@@ -55,6 +29,15 @@
         'black'
     ];
 
+    paths = paths.map(path => {
+        return path.map(point => {
+            if ("latitude" in point && "longitude" in point) {
+                return [point.latitude, point.longitude];
+            } else {
+                return point;
+            }
+        });
+    });
     const mymap = L.map('mapid')
                     .setView(paths[0][Math.floor(paths[0].length / 2)], 13);
 
@@ -72,9 +55,6 @@
             iconUrl: `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`
         });
         path.forEach((point, j) => {
-            if ("latitude" in point && "longitude" in point) {
-                point = [point.latitude, point.longitude];
-            }
             L.marker(point, {icon: icon}).addTo(mymap)
                 .bindPopup(`${j}: ${point.toString()}`);
         });
