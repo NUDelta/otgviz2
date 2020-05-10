@@ -20,7 +20,47 @@
 <script src="style.js"></script>
 <script src="paths.js"></script>
 <script>
-    paths = paths.map(path => {
+    function getGroupedBy(locUpdates, key) {
+        const groups = {}, result = [];
+        locUpdates.forEach(l => {
+            if (!(l[key] in groups)) {
+                groups[l[key]] = [];
+                result.push(groups[l[key]]);
+            }
+            groups[l[key]].push(l);
+        });
+        return result;
+    }
+
+// Temp, checking that path model works
+updates = updates.concat([
+  {
+    _id: "5eb765b5e73300402b4169c4",
+    timestamp: "2020-05-03T02:13:59.909Z",
+    latitude: 42.05770627272737,
+    longitude: -87.67520523636392,
+    userId: "4",
+    __v: 0
+  },
+  {
+    _id: "5eb765b5e73300402b4169c5",
+    timestamp: "2020-05-03T02:17:16.272Z",
+    latitude: 42.057790181818284,
+    longitude: -87.67524849090938,
+    userId: "4",
+    __v: 0
+  },
+  {
+    _id: "5eb765b5e73300402b4169c6",
+    timestamp: "2020-05-03T02:20:32.636Z",
+    latitude: 42.057874090909195,
+    longitude: -87.67529174545484,
+    userId: "4",
+    __v: 0
+  }
+]);
+
+    paths = getGroupedBy(updates, "userId").map(path => {
         return path.map(point => {
             if ("latitude" in point && "longitude" in point) {
                 return [point.latitude, point.longitude];
@@ -30,8 +70,10 @@
         });
     });
 
+    const center = paths.length > 0?
+                   paths[0][Math.floor(paths[0].length / 2)] : { latitude: 41.921662, longitude: -87.640479 };
     const mymap = L.map('mapid')
-                    .setView(paths[0][Math.floor(paths[0].length / 2)], 13);
+                    .setView(center, 13);
     L.tileLayer(mapStyle, {
         maxZoom: 18,
         id: 'mapbox/streets-v11',
